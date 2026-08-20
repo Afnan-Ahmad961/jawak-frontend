@@ -16,6 +16,10 @@ import {
  * the wrong dashboard. It is NOT the security boundary — Django enforces real
  * role/ownership behind the BFF. Per the Next docs, never treat proxy as auth.
  */
+
+/** Open to everyone — no session required. */
+const PUBLIC_PATHS = new Set<string>(["/", LOGIN_PATH]);
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -27,20 +31,18 @@ export function proxy(request: NextRequest) {
 
   const home = role ? ROLE_HOME[role] : LOGIN_PATH;
 
-  // Signed-in users have no business on the login page.
-  if (pathname === LOGIN_PATH) {
-    return isAuthed ? redirect(request, home) : NextResponse.next();
-  }
+  // Signed-in users skip the login page — straight to their dashboard.
+  if (pathname === LOGIN_PATH && isAuthed) return redirect(request, home);
 
-  // Everything else here is protected.
+  // Public pages (marketing landing + login) are open to everyone.
+  if (PUBLIC_PATHS.has(pathname)) return NextResponse.next();
+
+  // Everything else is protected.
   if (!isAuthed) {
     const url = new URL(LOGIN_PATH, request.url);
-    if (pathname !== "/") url.searchParams.set("next", pathname);
+    url.searchParams.set("next", pathname);
     return redirect(request, url);
   }
-
-  // Send the bare root to the caller's dashboard.
-  if (pathname === "/") return redirect(request, home);
 
   // Keep each role inside its own namespace.
   for (const r of ROLES) {

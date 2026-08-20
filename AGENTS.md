@@ -35,7 +35,7 @@ app/
   vendor/…                   # /vendor/*  — vendor dashboard
   admin/…                    # /admin/*   — admin console
   api/                       # the BFF (see below) — never called by Django
-  page.tsx                   # /  → redirects to the caller's role home
+  page.tsx                   # /  → public marketing landing page (CTAs → /login)
 proxy.ts                     # route guard (was middleware.ts in Next ≤15)
 
 components/
@@ -117,10 +117,12 @@ Django REST  ${DJANGO_API_URL}/api/v1/*
 - **Login:** the client gets a Google access token (Google Identity Services),
   POSTs it to `/api/auth/google`, which exchanges it at Django, sets the cookies,
   and returns the user. **Logout:** `/api/auth/logout` clears them.
-- **Route protection** lives in `proxy.ts`: unauthenticated → `/login`; wrong-role
-  prefix → their own home. This is an *optimistic* check only (Next docs are
-  explicit proxy is not a security boundary). Real enforcement is Django's
-  role/ownership checks behind the BFF.
+- **Route protection** lives in `proxy.ts`. Public paths (`/` landing, `/login`)
+  are open to everyone; a signed-in user hitting `/login` is bounced to their
+  role home. Everything else: unauthenticated → `/login`; wrong-role prefix →
+  their own home. This is an *optimistic* check only (Next docs are explicit
+  proxy is not a security boundary). Real enforcement is Django's role/ownership
+  checks behind the BFF.
 - Browser code fetches via `lib/api/http.ts` (same-origin `/api/v1/...`). It never
   imports `lib/env.ts`, `lib/auth/*`, or anything under `app/api`.
 
@@ -135,10 +137,35 @@ Django REST  ${DJANGO_API_URL}/api/v1/*
 - `LayoutProps<'/'>` / `PageProps` global types are generated on `next dev|build|typegen`.
 - Route Handlers are **not cached** except `GET` with `dynamic = 'force-static'`.
 
-## Conventions still open (ask before assuming)
+## Conventions (decided)
 
-Naming, error/loading patterns, and toast strategy are being finalized — confirm
-with the maintainer rather than inventing a pattern.
+### Naming
+- **Files:** kebab-case — `app-header.tsx`, `use-session.ts`, `theme-toggle.tsx`.
+- **Components:** PascalCase, one main component per file. Prefer *named*
+  exports; Next route files (`page.tsx`, `layout.tsx`, `error.tsx`, `route.ts`)
+  keep their required default export.
+- **Hooks:** `use-*`, named export.
+- **Query keys:** only from the `lib/query/keys.ts` factory — never inline an
+  array literal.
+- **Zod schemas:** live in `lib/validation/*` and *are* the payload contract;
+  derive TS types with `z.infer` rather than declaring shapes twice.
+
+### Error & loading
+- Per route segment, colocate `loading.tsx` (Suspense fallback) and `error.tsx`
+  (error boundary — a Client Component that takes `{ error, reset }`).
+- Use `<Skeleton>` matching the content shape, not a bare spinner, when the
+  layout is known.
+- **Form validation** renders inline via `<FormMessage>` (from Zod) — never a
+  toast.
+- Surface the real failure: read `ApiError.detail` from the BFF, not a generic
+  "Something went wrong".
+
+### Toasts (sonner)
+- Toasts are for **mutation outcomes only** — the result of a user action with a
+  side effect (*"Bid submitted"*, *"Dispute resolved"*, or a failure).
+- **Never** for validation (inline) or loading (skeletons).
+- Success copy is short and specific; error copy uses the API `detail`.
+- One `<Toaster>`, mounted in `components/providers/providers.tsx`.
 
 ## Commands
 
