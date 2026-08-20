@@ -1,0 +1,11 @@
+import type { ReactNode } from "react";
+import { AppHeader } from "@/components/shared/app-header";
+
+export default function AdminLayout({ children }: { children: ReactNode }) {
+  return (
+    <div className="flex min-h-full flex-col">
+      <AppHeader title="Admin" />
+      <main className="flex-1 p-4 md:p-6">{children}</main>
+    </div>
+  );
+}
