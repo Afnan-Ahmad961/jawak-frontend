@@ -12,19 +12,54 @@ export function djangoUrl(path: string): string {
   return `${DJANGO_API}/${path.replace(/^\/+/, "")}`;
 }
 
+/** Timeout for Django calls (30 seconds). */
+const DJANGO_TIMEOUT_MS = 30_000;
+
+/**
+ * Shared fetch helper for calling Django with timeout and proper error handling.
+ * Throws DjangoError on failures, distinguishing transport (502) from auth (401).
+ */
+export async function fetchDjangoWithTimeout(
+  url: string,
+  init?: RequestInit,
+): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), DJANGO_TIMEOUT_MS);
+  try {
+    const res = await fetch(url, {
+      ...init,
+      signal: controller.signal,
+      cache: "no-store",
+    });
+    clearTimeout(timeoutId);
+    return res;
+  } catch (err) {
+    clearTimeout(timeoutId);
+    // Network/timeout errors → transport failure (502).
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new DjangoError(502, "Django request timeout");
+    }
+    throw new DjangoError(502, "Django unreachable");
+  }
+}
+
 /** Attempt to mint a new access token from a refresh token. */
 export async function refreshAccess(
   refresh: string,
 ): Promise<string | null> {
-  const res = await fetch(djangoUrl("user/auth/token/refresh/"), {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ refresh }),
-    cache: "no-store",
-  });
-  if (!res.ok) return null;
-  const data = (await res.json()) as { access?: string };
-  return data.access ?? null;
+  try {
+    const res = await fetchDjangoWithTimeout(djangoUrl("user/auth/token/refresh/"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh }),
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { access?: string };
+    return data.access ?? null;
+  } catch {
+    // Transport failure or invalid refresh → null (caller will clear session).
+    return null;
+  }
 }
 
 /** Exchange a Google access token for Jawak JWTs + user. */
@@ -37,11 +72,10 @@ export type GoogleExchange = {
 export async function exchangeGoogleToken(
   googleAccessToken: string,
 ): Promise<GoogleExchange> {
-  const res = await fetch(djangoUrl("user/auth/google/"), {
+  const res = await fetchDjangoWithTimeout(djangoUrl("user/auth/google/"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ access_token: googleAccessToken }),
-    cache: "no-store",
   });
   if (!res.ok) {
     const detail = await res.text();

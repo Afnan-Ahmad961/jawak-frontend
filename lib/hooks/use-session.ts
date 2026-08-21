@@ -34,7 +34,10 @@ export function useLogout() {
   const router = useRouter();
   return useMutation({
     mutationFn: async () => {
-      await fetch("/api/auth/logout", { method: "POST" });
+      const response = await fetch("/api/auth/logout", { method: "POST" });
+      if (!response.ok) {
+        throw new Error("Logout failed");
+      }
     },
     onSuccess: () => {
       qc.clear();

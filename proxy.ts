@@ -32,7 +32,8 @@ export function proxy(request: NextRequest) {
   const home = role ? ROLE_HOME[role] : LOGIN_PATH;
 
   // Signed-in users skip the login page — straight to their dashboard.
-  if (pathname === LOGIN_PATH && isAuthed) return redirect(request, home);
+  // Only redirect if both authenticated AND have a valid role.
+  if (pathname === LOGIN_PATH && isAuthed && role) return redirect(request, home);
 
   // Public pages (marketing landing + login) are open to everyone.
   if (PUBLIC_PATHS.has(pathname)) return NextResponse.next();

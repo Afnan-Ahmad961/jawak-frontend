@@ -28,7 +28,7 @@ The API has three roles — `client`, `vendor`, `admin` — decided by
 `GET /api/v1/user/me/ → role`. Each gets its own URL namespace, layout, and
 component tree:
 
-```
+```text
 app/
   (auth)/login/              # /login — no URL segment (route group)
   client/…                   # /client/*  — customer dashboard
@@ -100,7 +100,7 @@ TanStack Query conventions:
 
 The browser **never** calls Django directly and **never** holds the JWT. Instead:
 
-```
+```text
 Browser (TanStack Query, same-origin fetch to /api/v1/*)
    │  cookie sent automatically (httpOnly, JS can't read it)
    ▼

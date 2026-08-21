@@ -92,9 +92,28 @@ export default function LoginPage() {
         throw new Error(data?.detail ?? "Sign-in failed");
       }
       const role = (data?.user?.role ?? "client") as Role;
-      const home = ROLES.includes(role) ? ROLE_HOME[role] : ROLE_HOME.client;
+      const defaultHome = ROLES.includes(role) ? ROLE_HOME[role] : ROLE_HOME.client;
+
+      // Respect a "next" return path if it's safe: same-origin and within role namespace.
+      const params = new URLSearchParams(window.location.search);
+      const next = params.get("next");
+      let destination = defaultHome;
+      if (next) {
+        try {
+          const nextUrl = new URL(next, window.location.origin);
+          // Only allow same-origin paths within the user's role namespace.
+          if (
+            nextUrl.origin === window.location.origin &&
+            (nextUrl.pathname === `/${role}` || nextUrl.pathname.startsWith(`/${role}/`))
+          ) {
+            destination = nextUrl.pathname + nextUrl.search + nextUrl.hash;
+          }
+        } catch {
+          // Invalid URL — fall back to default home.
+        }
+      }
       // Full navigation so proxy.ts + the new cookies take effect.
-      window.location.assign(home);
+      window.location.assign(destination);
     } catch (e) {
       setLoading(false);
       setError(e instanceof Error ? e.message : "Sign-in failed");
