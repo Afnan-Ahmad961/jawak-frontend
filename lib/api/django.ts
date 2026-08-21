@@ -43,23 +43,26 @@ export async function fetchDjangoWithTimeout(
   }
 }
 
-/** Attempt to mint a new access token from a refresh token. */
+/**
+ * Attempt to mint a new access token from a refresh token.
+ * Returns `null` only for an invalid/expired refresh (Django rejected it). A
+ * transport/timeout failure propagates as a `DjangoError(502)` so the caller can
+ * tell "session expired" apart from "upstream unavailable".
+ */
 export async function refreshAccess(
   refresh: string,
 ): Promise<string | null> {
-  try {
-    const res = await fetchDjangoWithTimeout(djangoUrl("user/auth/token/refresh/"), {
+  const res = await fetchDjangoWithTimeout(
+    djangoUrl("user/auth/token/refresh/"),
+    {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refresh }),
-    });
-    if (!res.ok) return null;
-    const data = (await res.json()) as { access?: string };
-    return data.access ?? null;
-  } catch {
-    // Transport failure or invalid refresh → null (caller will clear session).
-    return null;
-  }
+    },
+  );
+  if (!res.ok) return null;
+  const data = (await res.json()) as { access?: string };
+  return data.access ?? null;
 }
 
 /** Exchange a Google access token for Jawak JWTs + user. */

@@ -1,5 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { djangoUrl, refreshAccess } from "@/lib/api/django";
+import {
+  DjangoError,
+  djangoUrl,
+  fetchDjangoWithTimeout,
+  refreshAccess,
+} from "@/lib/api/django";
 import {
   clearSession,
   readAccess,
@@ -18,8 +23,15 @@ import {
 // Never cache: every call is per-user and token-bearing.
 export const dynamic = "force-dynamic";
 
-// Headers we must not copy from the incoming request to Django...
-const STRIP_REQUEST = new Set(["host", "cookie", "connection", "content-length"]);
+// Headers we must not copy from the incoming request to Django. `authorization`
+// is dropped so a client-sent value can't be combined with our BFF Bearer token.
+const STRIP_REQUEST = new Set([
+  "host",
+  "cookie",
+  "connection",
+  "content-length",
+  "authorization",
+]);
 // ...nor from Django's response back to the browser (fetch already decoded these).
 const STRIP_RESPONSE = new Set([
   "content-encoding",
@@ -48,46 +60,50 @@ async function forward(request: NextRequest, ctx: Ctx): Promise<Response> {
     if (!STRIP_REQUEST.has(key.toLowerCase())) headers.set(key, value);
   });
 
+  // Bounded call to Django; a transport/timeout failure throws DjangoError(502).
   const call = (token: string) =>
-    fetch(target, {
+    fetchDjangoWithTimeout(target, {
       method: request.method,
-      headers: new Headers([
-        ...headers,
-        ["authorization", `Bearer ${token}`],
-      ]),
+      headers: new Headers([...headers, ["authorization", `Bearer ${token}`]]),
       body,
-      cache: "no-store",
       redirect: "manual",
     });
 
-  let upstream = await call(access);
+  try {
+    let upstream = await call(access);
 
-  // Transparent refresh-and-retry on expiry.
-  if (upstream.status === 401) {
-    const refresh = await readRefresh();
-    const fresh = refresh ? await refreshAccess(refresh) : null;
-    if (fresh) {
-      await setAccess(fresh);
-      upstream = await call(fresh);
-    } else {
-      await clearSession();
-      return NextResponse.json(
-        { detail: "Session expired" },
-        { status: 401 },
-      );
+    // Transparent refresh-and-retry on expiry.
+    if (upstream.status === 401) {
+      const refresh = await readRefresh();
+      // refreshAccess returns null only for an invalid/expired refresh; a
+      // transport failure throws DjangoError and is handled below as a 502.
+      const fresh = refresh ? await refreshAccess(refresh) : null;
+      if (fresh) {
+        await setAccess(fresh);
+        upstream = await call(fresh);
+      } else {
+        await clearSession();
+        return NextResponse.json({ detail: "Session expired" }, { status: 401 });
+      }
     }
+
+    const respHeaders = new Headers();
+    upstream.headers.forEach((value, key) => {
+      if (!STRIP_RESPONSE.has(key.toLowerCase())) respHeaders.set(key, value);
+    });
+
+    return new NextResponse(upstream.body, {
+      status: upstream.status,
+      statusText: upstream.statusText,
+      headers: respHeaders,
+    });
+  } catch (err) {
+    // Keep transport failures distinct from auth: surface a real 502.
+    if (err instanceof DjangoError) {
+      return NextResponse.json({ detail: err.detail }, { status: err.status });
+    }
+    throw err;
   }
-
-  const respHeaders = new Headers();
-  upstream.headers.forEach((value, key) => {
-    if (!STRIP_RESPONSE.has(key.toLowerCase())) respHeaders.set(key, value);
-  });
-
-  return new NextResponse(upstream.body, {
-    status: upstream.status,
-    statusText: upstream.statusText,
-    headers: respHeaders,
-  });
 }
 
 export const GET = forward;

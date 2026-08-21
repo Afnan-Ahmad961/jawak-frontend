@@ -39,7 +39,10 @@ export function useLogout() {
         throw new Error("Logout failed");
       }
     },
-    onSuccess: () => {
+    // Run on success AND error: signing out is a local intent, so always wipe
+    // the client cache and leave. (The error still surfaces via mutation state
+    // for a future toast.)
+    onSettled: () => {
       qc.clear();
       // Cookies are already gone server-side; proxy will allow /login.
       router.replace("/login");
