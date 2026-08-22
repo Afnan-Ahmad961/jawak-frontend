@@ -50,6 +50,7 @@ export const queryKeys = {
   conversations: {
     all: () => ["conversations"] as const,
     list: () => ["conversations", "list"] as const,
+    detail: (id: string | number) => ["conversations", "detail", id] as const,
     messages: (id: string | number) => ["conversations", id, "messages"] as const,
   },
 
@@ -57,6 +58,7 @@ export const queryKeys = {
     all: () => ["notifications"] as const,
     list: (filters?: Filters) =>
       ["notifications", "list", filters ?? {}] as const,
+    unreadCount: () => ["notifications", "unread-count"] as const,
   },
 
   analytics: {

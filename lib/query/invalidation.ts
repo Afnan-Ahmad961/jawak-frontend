@@ -41,4 +41,49 @@ export const invalidate = {
       qc.invalidateQueries({ queryKey: queryKeys.notifications.all() }),
     ]);
   },
+
+  /** Creating/editing/deleting a request refreshes lists and its detail. */
+  async requestMutated(qc: QueryClient) {
+    await qc.invalidateQueries({ queryKey: queryKeys.requests.all() });
+  },
+
+  /** Withdrawing a bid updates the vendor's bid list and the request's bids. */
+  async bidWithdrawn(qc: QueryClient) {
+    await Promise.all([
+      qc.invalidateQueries({ queryKey: queryKeys.bids.all() }),
+      qc.invalidateQueries({ queryKey: queryKeys.requests.all() }),
+    ]);
+  },
+
+  /** A submitted review is visible on the order and on the vendor's profile. */
+  async reviewCreated(qc: QueryClient) {
+    await Promise.all([
+      qc.invalidateQueries({ queryKey: queryKeys.reviews.all() }),
+      qc.invalidateQueries({ queryKey: queryKeys.orders.all() }),
+      qc.invalidateQueries({ queryKey: queryKeys.vendors.all() }),
+    ]);
+  },
+
+  /** Raising a dispute moves the order to `disputed`. */
+  async disputeCreated(qc: QueryClient) {
+    await Promise.all([
+      qc.invalidateQueries({ queryKey: queryKeys.disputes.all() }),
+      qc.invalidateQueries({ queryKey: queryKeys.orders.all() }),
+    ]);
+  },
+
+  /** A sent message updates the thread and the conversation list preview. */
+  async messageSent(qc: QueryClient, conversationId: string | number) {
+    await Promise.all([
+      qc.invalidateQueries({
+        queryKey: queryKeys.conversations.messages(conversationId),
+      }),
+      qc.invalidateQueries({ queryKey: queryKeys.conversations.list() }),
+    ]);
+  },
+
+  /** Marking notifications read updates the list and the bell's unread count. */
+  async notificationsRead(qc: QueryClient) {
+    await qc.invalidateQueries({ queryKey: queryKeys.notifications.all() });
+  },
 };
