@@ -5,6 +5,20 @@ how it fits the conventions in [AGENTS.md](AGENTS.md). Newest entries at the top
 
 ---
 
+## 2026-08-23 — Fix: preserve Django's trailing slash through the BFF
+
+All API calls were failing because Django's `APPEND_SLASH` needs the trailing
+slash to reach it, but Next's catch-all drops it (`/api/v1/requests/` →
+`path ["requests"]`, `join("/")` → `requests`). Django then 302'd GETs and 500'd
+POSTs. Fixes:
+
+- **`app/api/v1/[...path]/route.ts`** re-adds the trailing slash to the forwarded
+  path before the query string, so Django always gets `…/requests/`.
+- **`next.config.ts`** sets `skipTrailingSlashRedirect: true` so Next doesn't
+  308-redirect the incoming slashed URL before it reaches the BFF (avoids an
+  extra hop / POST-body fragility). The BFF is the single authority for the
+  slash. (Hook call paths already ended with `/`.)
+
 ## 2026-08-22 — Complete client (customer) flow
 
 Goal: implement the entire customer journey end-to-end on the frontend against

@@ -40,6 +40,11 @@ function mediaRemotePatterns(): NonNullable<
 }
 
 const nextConfig: NextConfig = {
+  // Our API calls hit same-origin `/api/v1/*` with a trailing slash (Django's
+  // APPEND_SLASH). Don't let Next 308-redirect those to the slash-less variant
+  // before they reach the BFF — the BFF is the single authority for the slash
+  // it forwards to Django.
+  skipTrailingSlashRedirect: true,
   images: {
     remotePatterns: mediaRemotePatterns(),
   },
