@@ -41,7 +41,8 @@ export function DashboardView() {
   const activeOrders = orders.filter((o) => o.status === "active").length;
   const completedOrders = orders.filter((o) => o.status === "completed").length;
 
-  const greeting = user?.name ? `Welcome back, ${user.name}` : "Welcome back";
+  const displayName = user?.name || user?.username;
+  const greeting = displayName ? `Welcome back, ${displayName}` : "Welcome back";
 
   return (
     <div className="space-y-6">

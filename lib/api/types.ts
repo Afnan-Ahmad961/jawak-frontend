@@ -52,13 +52,15 @@ export type User = {
   id: Id;
   email: string;
   role: Role;
-  name?: string;
+  username?: string | null;
+  name?: string | null;
   avatar?: string | null;
 };
 
 /** Lightweight person reference embedded in bids/orders/messages/reviews. */
 export type UserSummary = {
   id: Id;
+  username?: string | null;
   name?: string | null;
   email?: string | null;
   avatar?: string | null;
@@ -81,7 +83,8 @@ export type Vendor = {
   specialties?: string[];
   capacity?: number | string | null;
   bio?: string | null;
-  rating?: number | null;
+  /** Backend field is `avg_rating` (vendor_profile). */
+  avg_rating?: number | null;
   review_count?: number | null;
   portfolio?: PortfolioItem[];
   user?: UserSummary;
@@ -93,7 +96,7 @@ export type VendorSummary = {
   id: Id;
   company_name?: string | null;
   location?: string | null;
-  rating?: number | null;
+  avg_rating?: number | null;
   review_count?: number | null;
 };
 
@@ -102,7 +105,8 @@ export type VendorSummary = {
 export type ReferenceImage = {
   id: Id;
   image: string;
-  caption?: string | null;
+  /** Backend field is `label` (design_reference_image). */
+  label?: string | null;
 };
 
 export type DesignRequest = {
@@ -110,7 +114,9 @@ export type DesignRequest = {
   title: string;
   apparel_type: string;
   quantity: number;
-  sizes?: string | null;
+  material?: string | null;
+  /** `sizes` is a JSONField on the backend — usually a string[] of size labels. */
+  sizes?: string[] | string | null;
   color_preferences?: string | null;
   deadline?: string | null;
   description?: string | null;
@@ -155,8 +161,9 @@ export type Order = {
   status: OrderStatus;
   current_stage?: ProductionStage | null;
   production_updates?: ProductionUpdate[];
-  proposed_price?: Money;
-  delivery_days?: number;
+  /** Backend field is `final_price` (order). */
+  final_price?: Money;
+  deadline?: string | null;
   has_review?: boolean;
   created_at?: string;
   updated_at?: string;
@@ -194,7 +201,9 @@ export type Message = {
   id: Id;
   conversation: Id;
   sender: UserSummary | Id;
-  content: string;
+  /** Backend field is `body` (message). */
+  body: string;
+  is_read?: boolean;
   created_at?: string;
 };
 
@@ -212,10 +221,12 @@ export type Conversation = {
 
 export type Notification = {
   id: Id;
-  type?: string;
-  title?: string | null;
+  /** Backend field is `notification_type`. */
+  notification_type?: string;
   message: string;
-  read: boolean;
+  /** Backend field is `is_read`. */
+  is_read: boolean;
+  /** Optional client-side target; the backend models this as a generic FK. */
   link?: string | null;
   created_at?: string;
 };
@@ -241,4 +252,4 @@ export type BidStatusUpdate = { status: BidStatus };
 
 export type StartConversationRequest = { design_request: Id; vendor: Id };
 
-export type SendMessageRequest = { content: string };
+export type SendMessageRequest = { body: string };

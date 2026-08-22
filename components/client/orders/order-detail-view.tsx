@@ -22,7 +22,7 @@ import { VendorSummary } from "@/components/shared/vendor-summary";
 import { DisputeFormDialog } from "@/components/client/orders/dispute-form-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { asObjectRef, refId } from "@/lib/api/refs";
-import { formatDateTime, formatMoney } from "@/lib/format";
+import { formatDate, formatDateTime, formatMoney } from "@/lib/format";
 import { ApiError } from "@/lib/api/http";
 import { useConfirmDelivery, useOrder } from "@/lib/hooks/use-orders";
 import { useStartConversation } from "@/lib/hooks/use-conversations";
@@ -186,16 +186,15 @@ export function OrderDetailView({ id }: { id: string }) {
               <dl className="space-y-3 text-xs">
                 <Detail
                   label="Agreed price"
-                  value={formatMoney(order.proposed_price ?? bid?.proposed_price)}
+                  value={formatMoney(order.final_price ?? bid?.proposed_price)}
                 />
                 <Detail
                   label="Delivery window"
                   value={
-                    order.delivery_days ?? bid?.delivery_days
-                      ? `${order.delivery_days ?? bid?.delivery_days} days`
-                      : "—"
+                    bid?.delivery_days ? `${bid.delivery_days} days` : "—"
                   }
                 />
+                <Detail label="Deadline" value={formatDate(order.deadline)} />
                 {request && (
                   <div className="flex items-center justify-between gap-2">
                     <dt className="text-muted-foreground">Request</dt>

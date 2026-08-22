@@ -32,6 +32,12 @@ export const requestFormSchema = z.object({
     .number({ message: "Enter a quantity" })
     .int("Whole pieces only")
     .min(1, "At least 1 piece"),
+  material: z
+    .string()
+    .trim()
+    .max(120, "Keep material under 120 characters")
+    .optional()
+    .or(z.literal("")),
   sizes: z
     .string()
     .trim()

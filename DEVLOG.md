@@ -5,6 +5,28 @@ how it fits the conventions in [AGENTS.md](AGENTS.md). Newest entries at the top
 
 ---
 
+## 2026-08-23 — Fix: align frontend to the real DB schema (POST requests/ 400)
+
+`POST requests/` returned `400 {"sizes":["Value must be valid JSON."]}` — `sizes`
+is a Django **JSONField**, but we sent a plain string. Got the authoritative
+schema and added it to [Overview.md](Overview.md) §5, then aligned every
+field-name mismatch (types + payloads + display):
+
+- `design_request.sizes` — send a JSON array (`JSON.stringify(["S","M"])`) built
+  from the comma-separated input; render arrays via `formatList`.
+- `design_request.material` — new field added to the type, Zod schema, form, and
+  detail view.
+- `design_reference_image.label` — was `caption`.
+- `message.body` — was `content` (both the send payload and rendering; this
+  would have 400'd every chat message).
+- `notification.is_read` / `notification_type` — were `read` / `type` (the bell's
+  unread badge/dot depended on the wrong key).
+- `vendor_profile.avg_rating` — was `rating` (vendor stars never rendered).
+- `order.final_price` + `order.deadline` — order price was read from the
+  non-existent `proposed_price`; delivery window now uses the bid's
+  `delivery_days` and shows the order `deadline`.
+- `user.username` — added; used as a display fallback.
+
 ## 2026-08-23 — Fix: preserve Django's trailing slash through the BFF
 
 All API calls were failing because Django's `APPEND_SLASH` needs the trailing

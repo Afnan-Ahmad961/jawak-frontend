@@ -21,7 +21,12 @@ import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { ImageGallery, type GalleryImage } from "@/components/shared/image-gallery";
 import { BidComparison } from "@/components/client/requests/bid-comparison";
 import { apparelLabel } from "@/lib/labels";
-import { formatDate, formatDateTime, formatQuantity } from "@/lib/format";
+import {
+  formatDate,
+  formatDateTime,
+  formatList,
+  formatQuantity,
+} from "@/lib/format";
 import { ApiError } from "@/lib/api/http";
 import {
   useAddReferenceImages,
@@ -58,7 +63,7 @@ export function RequestDetailView({ id }: { id: string }) {
     ...referenceImages.map((img) => ({
       id: img.id,
       src: img.image,
-      alt: img.caption ?? "Reference image",
+      alt: img.label ?? "Reference image",
     })),
   ];
 
@@ -156,7 +161,8 @@ export function RequestDetailView({ id }: { id: string }) {
                   label="Deadline"
                   value={request.deadline ? formatDate(request.deadline) : "No deadline"}
                 />
-                <Spec label="Sizes" value={request.sizes || "—"} />
+                <Spec label="Material" value={request.material || "—"} />
+                <Spec label="Sizes" value={formatList(request.sizes)} />
                 <Spec label="Colors" value={request.color_preferences || "—"} />
               </dl>
               {request.description && (
@@ -235,7 +241,7 @@ export function RequestDetailView({ id }: { id: string }) {
                       >
                         <Image
                           src={img.image}
-                          alt={img.caption ?? "Reference image"}
+                          alt={img.label ?? "Reference image"}
                           fill
                           sizes="120px"
                           className="object-cover"
@@ -273,7 +279,7 @@ export function RequestDetailView({ id }: { id: string }) {
                     images={referenceImages.map((img) => ({
                       id: img.id,
                       src: img.image,
-                      alt: img.caption ?? "Reference image",
+                      alt: img.label ?? "Reference image",
                     }))}
                     className="grid-cols-3"
                   />

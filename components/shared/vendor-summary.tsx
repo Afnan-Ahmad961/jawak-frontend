@@ -18,7 +18,7 @@ export function VendorSummary({
   className?: string;
 }) {
   const name = vendor?.company_name || "Unknown vendor";
-  const rating = vendor?.rating;
+  const rating = vendor?.avg_rating;
 
   return (
     <div className={cn("flex items-center gap-2", className)}>

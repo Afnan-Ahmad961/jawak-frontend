@@ -86,7 +86,7 @@ export function ChatPanel({ conversationId }: { conversationId: Id }) {
                       : "bg-muted text-foreground",
                   )}
                 >
-                  <p className="whitespace-pre-wrap break-words">{m.content}</p>
+                  <p className="whitespace-pre-wrap break-words">{m.body}</p>
                   <p
                     className={cn(
                       "mt-1 text-[0.625rem]",

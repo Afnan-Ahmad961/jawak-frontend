@@ -80,6 +80,12 @@ export function formatQuantity(value?: number | null): string {
   return `${new Intl.NumberFormat().format(value)} pcs`;
 }
 
+/** Render a value that may be a string[] (e.g. a JSONField) or a plain string. */
+export function formatList(value?: string[] | string | null): string {
+  if (Array.isArray(value)) return value.length ? value.join(", ") : DASH;
+  return value && value.trim() ? value : DASH;
+}
+
 /** Initials for an avatar fallback, from a name or email. */
 export function initials(nameOrEmail?: string | null): string {
   if (!nameOrEmail) return "?";

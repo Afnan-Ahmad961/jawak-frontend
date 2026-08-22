@@ -39,7 +39,16 @@ function buildRequestFormData(values: RequestFormValues): FormData {
   fd.set("title", values.title);
   fd.set("apparel_type", values.apparel_type);
   fd.set("quantity", String(values.quantity));
-  if (values.sizes) fd.set("sizes", values.sizes);
+  if (values.material) fd.set("material", values.material);
+  // `sizes` is a JSONField on the backend: send a JSON array of the
+  // comma-separated size labels (a bare string is rejected as invalid JSON).
+  if (values.sizes) {
+    const sizes = values.sizes
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (sizes.length > 0) fd.set("sizes", JSON.stringify(sizes));
+  }
   if (values.color_preferences)
     fd.set("color_preferences", values.color_preferences);
   if (values.deadline) fd.set("deadline", values.deadline);

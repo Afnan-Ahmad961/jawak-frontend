@@ -46,9 +46,9 @@ export function VendorDetailView({ id }: { id: string }) {
                 </p>
               )}
             </div>
-            {typeof vendor.rating === "number" && vendor.rating > 0 ? (
+            {typeof vendor.avg_rating === "number" && vendor.avg_rating > 0 ? (
               <StarRating
-                value={vendor.rating}
+                value={vendor.avg_rating}
                 count={vendor.review_count ?? undefined}
               />
             ) : (

@@ -26,7 +26,7 @@ export function ConversationList({
         const request = asObjectRef<DesignRequest>(c.design_request);
         const title = vendor?.company_name || "Vendor";
         const subtitle =
-          c.last_message?.content || request?.title || "No messages yet";
+          c.last_message?.body || request?.title || "No messages yet";
         const active = c.id === activeId;
 
         return (

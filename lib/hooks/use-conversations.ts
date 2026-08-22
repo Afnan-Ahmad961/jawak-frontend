@@ -57,10 +57,10 @@ export function useSendMessage(conversationId: Id) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (content: string) => {
-      const body: SendMessageRequest = { content };
+      const payload: SendMessageRequest = { body: content };
       return api.post<Message>(
         `conversations/${conversationId}/messages/`,
-        body,
+        payload,
       );
     },
     onSuccess: () => invalidate.messageSent(qc, conversationId),

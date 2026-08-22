@@ -29,7 +29,7 @@ export function NotificationBell() {
   const markRead = useMarkNotificationRead();
   const markAll = useMarkAllNotificationsRead();
 
-  const unread = notifications.filter((n) => !n.read);
+  const unread = notifications.filter((n) => !n.is_read);
   const unreadCount = unread.length;
 
   return (
@@ -78,7 +78,7 @@ export function NotificationBell() {
               <NotificationRow
                 key={n.id}
                 notification={n}
-                onRead={() => !n.read && markRead.mutate(n.id)}
+                onRead={() => !n.is_read && markRead.mutate(n.id)}
               />
             ))
           )}
@@ -100,15 +100,12 @@ function NotificationRow({
       <span
         className={cn(
           "mt-1 size-1.5 shrink-0 rounded-full",
-          notification.read ? "bg-transparent" : "bg-primary",
+          notification.is_read ? "bg-transparent" : "bg-primary",
         )}
         aria-hidden
       />
       <div className="min-w-0 flex-1 space-y-0.5">
-        {notification.title && (
-          <p className="truncate text-xs font-medium">{notification.title}</p>
-        )}
-        <p className="text-muted-foreground text-xs">{notification.message}</p>
+        <p className="text-xs">{notification.message}</p>
         <p className="text-muted-foreground/70 text-[0.625rem]">
           {formatRelative(notification.created_at)}
         </p>
@@ -118,7 +115,7 @@ function NotificationRow({
 
   const className = cn(
     "block w-full px-3 py-2 text-left transition-colors hover:bg-muted/50",
-    !notification.read && "bg-muted/30",
+    !notification.is_read && "bg-muted/30",
   );
 
   // Link out when the notification carries a target; otherwise it's just a

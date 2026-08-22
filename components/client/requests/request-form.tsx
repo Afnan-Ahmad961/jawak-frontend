@@ -82,7 +82,11 @@ export function RequestForm({ request }: { request?: DesignRequest }) {
       apparel_type: (request?.apparel_type ??
         "") as RequestFormValues["apparel_type"],
       quantity: request?.quantity ?? 1,
-      sizes: request?.sizes ?? "",
+      material: request?.material ?? "",
+      // `sizes` comes back as a JSON array; show it as a comma-separated string.
+      sizes: Array.isArray(request?.sizes)
+        ? request.sizes.join(", ")
+        : (request?.sizes ?? ""),
       color_preferences: request?.color_preferences ?? "",
       deadline: request?.deadline ? request.deadline.slice(0, 10) : "",
       description: request?.description ?? "",
@@ -207,6 +211,23 @@ export function RequestForm({ request }: { request?: DesignRequest }) {
               />
             </div>
 
+            <FormField
+              control={form.control}
+              name="material"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Material</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g. 100% cotton, 320 gsm fleece"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <div className="grid gap-4 sm:grid-cols-2">
               <FormField
                 control={form.control}
@@ -217,6 +238,9 @@ export function RequestForm({ request }: { request?: DesignRequest }) {
                     <FormControl>
                       <Input placeholder="e.g. S, M, L, XL" {...field} />
                     </FormControl>
+                    <FormDescription>
+                      Comma-separated — stored as a list.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

@@ -10,7 +10,8 @@ export function ReviewList({ reviews }: { reviews: Review[] }) {
     <ul className="space-y-4">
       {reviews.map((review) => {
         const reviewer = asObjectRef<UserSummary>(review.reviewer);
-        const label = reviewer?.name || reviewer?.email || "Client";
+        const label =
+          reviewer?.name || reviewer?.username || reviewer?.email || "Client";
         return (
           <li key={review.id} className="flex gap-3">
             <Avatar size="sm">
