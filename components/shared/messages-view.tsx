@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useQueryState } from "nuqs";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Message01Icon, ArrowLeft01Icon } from "@hugeicons/core-free-icons";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -12,28 +13,32 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { DataError } from "@/components/shared/data-error";
 import { ConversationList } from "@/components/shared/conversation-list";
 import { ChatPanel } from "@/components/shared/chat-panel";
-import { VendorSummary } from "@/components/shared/vendor-summary";
-import { asObjectRef } from "@/lib/api/refs";
 import { cn } from "@/lib/utils";
+import { initials } from "@/lib/format";
+import {
+  conversationCounterpartyName,
+  type ChatPerspective,
+} from "@/lib/conversation";
 import { useConversations } from "@/lib/hooks/use-conversations";
-import type { Id, VendorSummary as VendorSummaryType } from "@/lib/api/types";
+import type { Id } from "@/lib/api/types";
 
 /**
- * Two-pane messaging: thread list + open conversation. The active thread id is
- * in the URL (`?c=<id>`) so a chat is deep-linkable (the "message vendor"
- * actions navigate straight here). On mobile the panes swap.
+ * Two-pane messaging shared by client and vendor. `perspective` decides which
+ * party is shown as the counterparty. The active thread id lives in the URL
+ * (`?c=<id>`) so a chat is deep-linkable; on mobile the panes swap.
  */
-export function MessagesView() {
+export function MessagesView({
+  perspective,
+  description,
+}: {
+  perspective: ChatPerspective;
+  description: string;
+}) {
   const [active, setActive] = useQueryState("c");
   const { data: conversations = [], isLoading, isError, error, refetch } =
     useConversations();
 
-  const activeConversation = conversations.find(
-    (c) => String(c.id) === active,
-  );
-  const activeVendor = asObjectRef<VendorSummaryType>(
-    activeConversation?.vendor,
-  );
+  const activeConversation = conversations.find((c) => String(c.id) === active);
   // Drive the mobile pane switch from the *resolved* conversation, not the raw
   // `?c=` value — a stale/invalid id would otherwise hide both panes.
   const showChat = Boolean(activeConversation);
@@ -49,10 +54,7 @@ export function MessagesView() {
 
   return (
     <div className="space-y-4">
-      <PageHeader
-        title="Messages"
-        description="Negotiate with vendors on your requests."
-      />
+      <PageHeader title="Messages" description={description} />
 
       {isLoading ? (
         <Skeleton className="h-[32rem] w-full" />
@@ -62,7 +64,11 @@ export function MessagesView() {
         <EmptyState
           icon={Message01Icon}
           title="No conversations yet"
-          description="Start a chat from a bid on one of your requests to negotiate price and timeline."
+          description={
+            perspective === "client"
+              ? "Start a chat from a bid on one of your requests to negotiate price and timeline."
+              : "Start a chat from a job on the board to negotiate with the client."
+          }
         />
       ) : (
         <Card className="h-[32rem] overflow-hidden p-0">
@@ -77,6 +83,7 @@ export function MessagesView() {
               <ConversationList
                 conversations={conversations}
                 activeId={activeConversation?.id ?? null}
+                perspective={perspective}
                 onSelect={select}
               />
             </div>
@@ -95,7 +102,22 @@ export function MessagesView() {
                     >
                       <HugeiconsIcon icon={ArrowLeft01Icon} />
                     </Button>
-                    <VendorSummary vendor={activeVendor} showRating={false} />
+                    <Avatar size="sm">
+                      <AvatarFallback>
+                        {initials(
+                          conversationCounterpartyName(
+                            activeConversation,
+                            perspective,
+                          ),
+                        )}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="truncate text-xs font-medium">
+                      {conversationCounterpartyName(
+                        activeConversation,
+                        perspective,
+                      )}
+                    </span>
                   </div>
                   <div className="min-h-0 flex-1">
                     <ChatPanel conversationId={activeConversation.id} />

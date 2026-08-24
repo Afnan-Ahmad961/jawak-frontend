@@ -86,4 +86,30 @@ export const invalidate = {
   async notificationsRead(qc: QueryClient) {
     await qc.invalidateQueries({ queryKey: queryKeys.notifications.all() });
   },
+
+  /** Creating/editing the vendor profile also changes the session role + `me`. */
+  async vendorProfileMutated(qc: QueryClient) {
+    await Promise.all([
+      qc.invalidateQueries({ queryKey: queryKeys.vendors.me() }),
+      qc.invalidateQueries({ queryKey: queryKeys.vendors.all() }),
+      // First profile creation promotes the account to `vendor`.
+      qc.invalidateQueries({ queryKey: queryKeys.me() }),
+    ]);
+  },
+
+  /** Adding/removing a portfolio item refreshes the vendor's own profile. */
+  async portfolioMutated(qc: QueryClient) {
+    await Promise.all([
+      qc.invalidateQueries({ queryKey: queryKeys.vendors.me() }),
+      qc.invalidateQueries({ queryKey: queryKeys.vendors.all() }),
+    ]);
+  },
+
+  /** Placing a bid updates the vendor's bids and the request's bid list. */
+  async bidPlaced(qc: QueryClient) {
+    await Promise.all([
+      qc.invalidateQueries({ queryKey: queryKeys.bids.all() }),
+      qc.invalidateQueries({ queryKey: queryKeys.requests.all() }),
+    ]);
+  },
 };

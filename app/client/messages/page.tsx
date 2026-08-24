@@ -1,5 +1,10 @@
-import { MessagesView } from "@/components/client/messages/messages-view";
+import { MessagesView } from "@/components/shared/messages-view";
 
 export default function ClientMessagesPage() {
-  return <MessagesView />;
+  return (
+    <MessagesView
+      perspective="client"
+      description="Negotiate with vendors on your requests."
+    />
+  );
 }

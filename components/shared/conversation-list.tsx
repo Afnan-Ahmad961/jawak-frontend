@@ -3,30 +3,35 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { formatRelative, initials } from "@/lib/format";
-import { asObjectRef } from "@/lib/api/refs";
-import type { Conversation, DesignRequest, Id, VendorSummary } from "@/lib/api/types";
+import {
+  conversationCounterpartyName,
+  conversationRequestTitle,
+  type ChatPerspective,
+} from "@/lib/conversation";
+import type { Conversation, Id } from "@/lib/api/types";
 
 /**
  * Selectable list of conversation threads. `activeId` highlights the open one;
- * `onSelect` swaps the chat panel. Used on the messages page.
+ * `onSelect` swaps the chat panel. `perspective` picks which party's name to
+ * show (a client sees the vendor; a vendor sees the client).
  */
 export function ConversationList({
   conversations,
   activeId,
+  perspective,
   onSelect,
 }: {
   conversations: Conversation[];
   activeId: Id | null;
+  perspective: ChatPerspective;
   onSelect: (id: Id) => void;
 }) {
   return (
     <ul className="divide-y divide-border">
       {conversations.map((c) => {
-        const vendor = asObjectRef<VendorSummary>(c.vendor);
-        const request = asObjectRef<DesignRequest>(c.design_request);
-        const title = vendor?.company_name || "Vendor";
+        const title = conversationCounterpartyName(c, perspective);
         const subtitle =
-          c.last_message?.body || request?.title || "No messages yet";
+          c.last_message?.body || conversationRequestTitle(c) || "No messages yet";
         const active = c.id === activeId;
 
         return (

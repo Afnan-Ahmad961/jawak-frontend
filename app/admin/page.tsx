@@ -1,14 +1,5 @@
-import { DashboardPlaceholder } from "@/components/shared/dashboard-placeholder";
+import { AnalyticsView } from "@/components/admin/analytics/analytics-view";
 
 export default function AdminHome() {
-  return (
-    <DashboardPlaceholder
-      title="Admin console"
-      description="Moderate disputes and monitor the marketplace."
-      next={[
-        "Review and resolve disputes",
-        "Marketplace analytics overview (volume metrics)",
-      ]}
-    />
-  );
+  return <AnalyticsView />;
 }
