@@ -15,6 +15,10 @@ Frontend for **Jawak**, a bid-based marketplace for local clothing manufacturing
 [Overview.md](Overview.md) for the domain model and the full endpoint list;
 this file is *how we build*.
 
+> **Dev log:** every feature built (and planned) is recorded in
+> [DEVLOG.md](DEVLOG.md). Append an entry there whenever you ship or scope work —
+> newest at the top — so the build history stays readable in one place.
+
 Stack: **Next.js 16 (App Router) · React 19 · TypeScript · Tailwind v4 · shadcn/ui
 · TanStack Query · Zustand · nuqs · React Hook Form + Zod**.
 
