@@ -133,7 +133,7 @@ export type DesignRequest = {
 
 export type Bid = {
   id: Id;
-  design_request: Id;
+  design_request: DesignRequest | Id;
   vendor: VendorSummary | Id;
   proposed_price: Money;
   delivery_days: number;
@@ -253,3 +253,78 @@ export type BidStatusUpdate = { status: BidStatus };
 export type StartConversationRequest = { design_request: Id; vendor: Id };
 
 export type SendMessageRequest = { body: string };
+
+export type CreateBidRequest = {
+  design_request: Id;
+  proposed_price: number;
+  delivery_days: number;
+  message?: string;
+};
+
+/** Vendor profile create/edit body (JSON; portfolio images are separate). */
+export type VendorProfilePayload = {
+  company_name: string;
+  location?: string;
+  specialties?: string[];
+  capacity?: number;
+  bio?: string;
+};
+
+/** Portfolio item upload (multipart — `image` is a File). */
+export type CreatePortfolioItemRequest = {
+  image: File;
+  title?: string;
+  description?: string;
+};
+
+/** Production milestone (multipart — optional `image` File). */
+export type CreateProductionUpdateRequest = {
+  stage: ProductionStage;
+  note?: string;
+  image?: File;
+};
+
+/** Admin dispute resolution body. */
+export type DisputeResolution = {
+  status: Extract<DisputeStatus, "resolved" | "rejected">;
+  resolution: string;
+};
+
+// --- Analytics (admin) ----------------------------------------------------
+// The overview endpoint returns volume metrics only (no money/revenue yet).
+// Breakdowns may serialize as a { key: count } map or a [{ ..., count }] list;
+// components normalize both. All fields optional — rendered defensively.
+
+export type AnalyticsBreakdown =
+  | Record<string, number>
+  | { label?: string; key?: string; count: number; [k: string]: unknown }[];
+
+export type AnalyticsTopVendor = {
+  id: Id;
+  company_name?: string | null;
+  avg_rating?: number | null;
+  review_count?: number | null;
+  order_count?: number | null;
+};
+
+export type AnalyticsOverview = {
+  totals?: {
+    requests?: number;
+    bids?: number;
+    orders?: number;
+    vendors?: number;
+    disputes?: number;
+  };
+  total_requests?: number;
+  total_bids?: number;
+  total_orders?: number;
+  total_vendors?: number;
+  total_disputes?: number;
+  average_bid_amount?: Money;
+  bids_per_request?: number;
+  /** Fraction in [0, 1] (disputes / orders) — rendered as a percentage. */
+  dispute_rate?: number;
+  requests_by_apparel_type?: AnalyticsBreakdown;
+  orders_by_status?: AnalyticsBreakdown;
+  top_vendors?: AnalyticsTopVendor[];
+};

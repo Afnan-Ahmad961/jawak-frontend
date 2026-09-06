@@ -3,7 +3,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api/http";
 import { unwrapList } from "@/lib/api/pagination";
-import type { Id, Order, OrderStatus } from "@/lib/api/types";
+import type {
+  CreateProductionUpdateRequest,
+  Id,
+  Order,
+  OrderStatus,
+  ProductionUpdate,
+} from "@/lib/api/types";
 import { queryKeys } from "@/lib/query/keys";
 import { invalidate } from "@/lib/query/invalidation";
 
@@ -33,6 +39,27 @@ export function useConfirmDelivery(id: Id) {
     mutationFn: () => api.post<Order>(`orders/${id}/confirm-delivery/`),
     onSuccess: async () => {
       await invalidate.deliveryConfirmed(qc);
+      await qc.invalidateQueries({ queryKey: queryKeys.orders.detail(id) });
+    },
+  });
+}
+
+/**
+ * Vendor posts a production milestone. Multipart (an optional photo), so the
+ * body is FormData. Stages only move forward — Django enforces the order.
+ */
+export function useAddProductionUpdate(id: Id) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: CreateProductionUpdateRequest) => {
+      const fd = new FormData();
+      fd.set("stage", input.stage);
+      if (input.note) fd.set("note", input.note);
+      if (input.image instanceof File) fd.set("image", input.image);
+      return api.post<ProductionUpdate>(`orders/${id}/production-updates/`, fd);
+    },
+    onSuccess: async () => {
+      await invalidate.productionUpdated(qc);
       await qc.invalidateQueries({ queryKey: queryKeys.orders.detail(id) });
     },
   });

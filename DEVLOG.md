@@ -5,6 +5,72 @@ how it fits the conventions in [AGENTS.md](AGENTS.md). Newest entries at the top
 
 ---
 
+## 2026-08-24 — Vendor & admin flows
+
+Completed the two remaining role dashboards, reusing the client foundation
+(types, hooks, shared components) built earlier.
+
+### Shared additions
+
+- **Types** (`lib/api/types.ts`): `CreateBidRequest`, `VendorProfilePayload`,
+  `DisputeResolution`, and the `AnalyticsOverview` shape (+ breakdown/top-vendor
+  helpers). Broadened `Bid.design_request` to `DesignRequest | Id` so the
+  vendor's bid list can show request titles.
+- **Hooks**: `useMyVendorProfile` (null on 404 → onboarding), `useCreateVendorProfile`,
+  `useUpdateVendorProfile`, `useAddPortfolioItem`, `useDeletePortfolioItem`
+  (use-vendors); `usePlaceBid` (use-bids); `useAddProductionUpdate` (use-orders);
+  `useResolveDispute` (use-disputes); `useAnalyticsOverview` (new use-analytics).
+- **Invalidation**: `vendorProfileMutated` (also refreshes `me` — first profile
+  promotes the account to vendor), `portfolioMutated`, `bidPlaced`.
+- **Validation**: `bid`, `vendor-profile`, `production-update`, `dispute-resolution`.
+- **Messaging promoted to shared**: `MessagesView` now takes a `perspective`
+  (`client` | `vendor`) so both roles share one two-pane chat; the counterparty
+  (vendor for a client, client for a vendor) resolves via `lib/conversation.ts`.
+  `ConversationList` is perspective-aware. Removed the client-only copy.
+
+### Vendor routes (`app/vendor/*`, colocated loading + error)
+
+- `/vendor` — dashboard (profile prompt if none; bid/order stat tiles + recent activity).
+- `/vendor/profile` — create/edit profile (creating promotes to vendor) + portfolio manager.
+- `/vendor/jobs` · `/[id]` — open job board (flags already-bid jobs) + detail with a bid form / your-bid + withdraw, message client.
+- `/vendor/bids` — all own bids with withdraw.
+- `/vendor/orders` · `/[id]` — assigned orders + production timeline, post production update (multipart), review client.
+- `/vendor/messages` — shared chat (vendor perspective).
+
+### Admin routes (`app/admin/*`, colocated loading + error)
+
+- `/admin` — analytics overview: totals, avg bid / bids-per-request / dispute
+  rate, requests-by-apparel-type and orders-by-status bars, top vendors.
+  Breakdowns normalize both map and list serializations.
+- `/admin/disputes` · `/[id]` — all disputes with status filter + resolve/reject
+  dialog (resolution required); detail shows the complaint and resolution.
+
+### Notes
+
+- Removed the now-unused `dashboard-placeholder`.
+- All colors via tokens; keys from the factory; nuqs feeds keys; multipart at
+  submit; inline validation; toasts for outcomes; no `any`.
+
+### Review
+
+Ran CodeRabbit across three passes; fixed all findings:
+- API payload types centralized in `lib/api` (`CreatePortfolioItemRequest`,
+  `CreateProductionUpdateRequest`) instead of inline hook shapes.
+- Production-update dialog offers only forward stages and re-seeds the default
+  to the next stage on open (no more backend-rejected non-forward updates).
+- Vendor job detail waits for the bids query (loading + error/retry) before
+  showing the bid form, so an existing bidder can't submit a duplicate.
+- Vendor profile capacity: blank input stays `undefined` (no coerce-to-0).
+- Portfolio remove control is keyboard-focus visible.
+- `dispute_rate` documented as a fraction (0–1) and rendered as a percent
+  (removed the ambiguous fraction-or-percent heuristic).
+
+Lint, typecheck, and `next build` all pass. (The final `dispute_rate` fix
+landed after CodeRabbit's review quota for the window was reached; it's a
+self-contained formatter change verified by the local checks.)
+
+---
+
 ## 2026-08-23 — Fix: align frontend to the real DB schema (POST requests/ 400)
 
 `POST requests/` returned `400 {"sizes":["Value must be valid JSON."]}` — `sizes`
