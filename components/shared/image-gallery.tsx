@@ -5,6 +5,7 @@ import Image from "next/image";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ImageNotFound01Icon } from "@hugeicons/core-free-icons";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { mediaUrl } from "@/lib/media";
 import { cn } from "@/lib/utils";
 
 export type GalleryImage = { id: string | number; src: string; alt?: string };
@@ -52,7 +53,7 @@ export function ImageGallery({
               className="group relative aspect-square overflow-hidden rounded-md border border-border bg-muted outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
             >
               <Image
-                src={img.src}
+                src={mediaUrl(img.src)}
                 alt={img.alt ?? "Image"}
                 fill
                 sizes="(max-width: 768px) 50vw, 25vw"
@@ -75,7 +76,7 @@ export function ImageGallery({
             ) : (
               <div className="relative aspect-square w-full overflow-hidden rounded-md bg-muted">
                 <Image
-                  src={active.src}
+                  src={mediaUrl(active.src)}
                   alt={active.alt ?? "Image"}
                   fill
                   sizes="(max-width: 768px) 100vw, 42rem"

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { APPAREL_TYPES } from "@/lib/labels";
+import { todayIso } from "@/lib/format";
 
 /**
  * Design-request create/edit schema. This *is* the payload contract — the form
@@ -54,7 +55,13 @@ export const requestFormSchema = z.object({
     .string()
     .trim()
     .optional()
-    .or(z.literal("")),
+    .or(z.literal(""))
+    // A deadline is optional, but if given it can't be in the past — you can't
+    // ask for delivery before today. Compare as local calendar dates so a value
+    // of "today" is always allowed regardless of timezone.
+    .refine((value) => !value || value >= todayIso(), {
+      message: "Deadline can't be in the past",
+    }),
   description: z
     .string()
     .trim()

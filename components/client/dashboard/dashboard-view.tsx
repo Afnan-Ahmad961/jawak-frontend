@@ -130,31 +130,39 @@ function StatTile({
   return (
     <Link
       href={href}
-      className="block rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="group block rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
-      <Card className="transition-colors hover:bg-muted/40">
-        <CardContent className="flex items-center gap-3">
-          <div className="bg-muted text-muted-foreground flex size-9 shrink-0 items-center justify-center rounded-md">
-            <HugeiconsIcon icon={icon} className="size-4" />
+      <Card className="h-full transition-colors group-hover:bg-muted/40">
+        <CardContent className="flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <div className="bg-muted text-muted-foreground flex size-10 shrink-0 items-center justify-center rounded-lg transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+              <HugeiconsIcon icon={icon} className="size-5" />
+            </div>
+            <HugeiconsIcon
+              icon={ArrowRight01Icon}
+              className="text-muted-foreground size-4 -translate-x-1 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100"
+            />
           </div>
           <div className="min-w-0">
             {loading ? (
-              <Skeleton className="h-6 w-10" />
+              <Skeleton className="h-8 w-12" />
             ) : unavailable ? (
               // Don't render a real "0" when the fetch failed — that would
               // report unavailable data as a genuine count.
               <p
-                className="text-muted-foreground text-xl font-semibold tracking-tight"
+                className="text-muted-foreground text-3xl font-semibold tracking-tight"
                 title="Couldn't load this figure"
               >
                 —
               </p>
             ) : (
-              <p className="text-xl font-semibold tracking-tight tabular-nums">
+              <p className="text-3xl font-semibold tracking-tight tabular-nums">
                 {value}
               </p>
             )}
-            <p className="text-muted-foreground truncate text-xs">{label}</p>
+            <p className="text-muted-foreground mt-0.5 truncate text-xs">
+              {label}
+            </p>
           </div>
         </CardContent>
       </Card>

@@ -67,17 +67,17 @@ export const PRODUCTION_STAGE_STEPS: { value: ProductionStage; label: string }[]
     { value: "delivered", label: "Delivered" },
   ];
 
-/** Apparel taxonomy for the request form's select. Value = API string. */
+/**
+ * Apparel taxonomy for the request form's select. Value = API string; these
+ * must match the backend's `ApparelType` choices exactly (a value the API
+ * rejects would fail on submit). Source of truth:
+ *   hoodie · jacket · tshirt · football_kit · other
+ */
 export const APPAREL_TYPES: { value: string; label: string }[] = [
-  { value: "t_shirt", label: "T-shirt" },
+  { value: "tshirt", label: "T-Shirt" },
   { value: "hoodie", label: "Hoodie" },
   { value: "jacket", label: "Jacket" },
-  { value: "pants", label: "Pants" },
-  { value: "dress", label: "Dress" },
-  { value: "shirt", label: "Shirt" },
-  { value: "activewear", label: "Activewear" },
-  { value: "uniform", label: "Uniform" },
-  { value: "accessories", label: "Accessories" },
+  { value: "football_kit", label: "Football Kit" },
   { value: "other", label: "Other" },
 ];
 

@@ -28,6 +28,7 @@ import {
   formatQuantity,
 } from "@/lib/format";
 import { ApiError } from "@/lib/api/http";
+import { mediaUrl } from "@/lib/media";
 import {
   useAddReferenceImages,
   useDeleteReferenceImage,
@@ -211,7 +212,7 @@ export function RequestDetailView({ id }: { id: string }) {
               {request.design_image ? (
                 <div className="relative aspect-square w-full overflow-hidden rounded-md border border-border bg-muted">
                   <Image
-                    src={request.design_image}
+                    src={mediaUrl(request.design_image)}
                     alt={request.title}
                     fill
                     sizes="(max-width: 1024px) 100vw, 33vw"
@@ -240,7 +241,7 @@ export function RequestDetailView({ id }: { id: string }) {
                         className="group relative aspect-square overflow-hidden rounded-md border border-border bg-muted"
                       >
                         <Image
-                          src={img.image}
+                          src={mediaUrl(img.image)}
                           alt={img.label ?? "Reference image"}
                           fill
                           sizes="120px"

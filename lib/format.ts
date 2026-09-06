@@ -21,6 +21,20 @@ function parseApiDate(value: string): Date {
   return new Date(value);
 }
 
+/**
+ * Today as a local `YYYY-MM-DD` string — the same shape as a `<input type=date>`
+ * value and an API date. Built from local calendar parts (not `toISOString`,
+ * which is UTC and can land on the wrong day). Use it as the `min` for date
+ * pickers and to reject past deadlines.
+ */
+export function todayIso(): string {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  const d = String(now.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
 export function formatDate(value?: string | null): string {
   if (!value) return DASH;
   const d = parseApiDate(value);

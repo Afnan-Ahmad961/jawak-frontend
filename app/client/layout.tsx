@@ -1,17 +1,21 @@
 import type { ReactNode } from "react";
-import { AppHeader } from "@/components/shared/app-header";
-import { ClientNav } from "@/components/client/client-nav";
+import { ClientSidebar } from "@/components/client/client-sidebar";
+import { ClientTopbar } from "@/components/client/client-topbar";
 
 export default function ClientLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-full flex-col">
-      <AppHeader title="Customer" />
-      <div className="border-b border-border px-4 py-1.5 md:px-6">
-        <ClientNav />
+    <div className="flex h-dvh overflow-hidden">
+      {/* Fixed desktop rail; on mobile it lives in the top bar's drawer. */}
+      <aside className="hidden w-60 shrink-0 border-r border-sidebar-border md:block">
+        <ClientSidebar />
+      </aside>
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <ClientTopbar />
+        <main className="flex-1 overflow-y-auto">
+          <div className="mx-auto w-full max-w-6xl p-4 md:p-6">{children}</div>
+        </main>
       </div>
-      <main className="mx-auto w-full max-w-6xl flex-1 p-4 md:p-6">
-        {children}
-      </main>
     </div>
   );
 }

@@ -23,14 +23,18 @@ const S3_PATTERNS: RemotePatterns = [
  * Allow the image optimizer to fetch only from the media hosts we actually use,
  * never a blanket wildcard (that turns `/_next/image` into an open outbound
  * fetch proxy). Sources: the S3 bucket above plus hosts derived from env:
- *   - DJANGO_API_URL       — Django serves local media in dev.
- *   - NEXT_PUBLIC_MEDIA_URL — CDN/custom media origin in prod (optional).
+ *   - DJANGO_API_URL        — Django serves local media in dev (server env).
+ *   - NEXT_PUBLIC_BACKEND_URL — same Django host, the value the browser knows;
+ *                               `lib/media.ts` builds media URLs from it, so the
+ *                               optimizer must allow it too.
+ *   - NEXT_PUBLIC_MEDIA_URL  — CDN/custom media origin in prod (optional).
  */
 function mediaRemotePatterns(): RemotePatterns {
   const patterns: RemotePatterns = [...S3_PATTERNS];
 
   for (const raw of [
     process.env.DJANGO_API_URL,
+    process.env.NEXT_PUBLIC_BACKEND_URL,
     process.env.NEXT_PUBLIC_MEDIA_URL,
   ]) {
     if (!raw) continue;
@@ -62,6 +66,10 @@ const nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true,
   images: {
     remotePatterns: mediaRemotePatterns(),
+    // In dev, Django serves media from localhost, which resolves to a loopback
+    // IP. Next 16's optimizer refuses those by default (SSRF guard). Production
+    // media is S3/CDN on public hosts, so allow local IPs in development only.
+    dangerouslyAllowLocalIP: process.env.NODE_ENV !== "production",
   },
 };
 
