@@ -5,6 +5,51 @@ how it fits the conventions in [AGENTS.md](AGENTS.md). Newest entries at the top
 
 ---
 
+## 2026-09-06 — Client dashboard shell + fixes
+
+Reshaped the customer UI into a traditional sidebar dashboard and fixed a set of
+cross-cutting issues surfaced during a click-through with real backend data.
+
+### Client navigation → sidebar
+
+- Replaced the header submenu (`client-nav`, removed) with a fixed left rail:
+  `components/client/client-sidebar.tsx` (brand, primary "New request" CTA,
+  section links with a filled active state, signed-in user card) and
+  `components/client/client-topbar.tsx` (drawer trigger + route-derived section
+  title + notifications/theme/sign-out). On mobile the rail collapses into a
+  `Sheet` drawer. `app/client/layout.tsx` now composes rail + topbar + scroll area.
+- Polished the dashboard stat tiles (larger figures, icon-in-tile, hover arrow).
+
+### Images (relative media URLs)
+
+- Django returns **relative** `/media/...` paths; `next/image` resolved them
+  against the frontend origin (404). New `lib/media.ts#mediaUrl` prefixes the
+  backend origin (`NEXT_PUBLIC_BACKEND_URL`), passing through absolute/`blob:`/
+  `data:` URLs. Applied at every API-image site (gallery, request/job cards,
+  request detail, portfolio, production timeline, form preview).
+- `next.config.ts`: allow `NEXT_PUBLIC_BACKEND_URL` in `images.remotePatterns`,
+  and set `dangerouslyAllowLocalIP` in **development only** (the optimizer
+  otherwise refuses loopback hosts; prod media is S3/public).
+
+### Console errors
+
+- Dropped `next-themes` for a small in-house `ThemeProvider` (theme-provider.tsx)
+  built on `useSyncExternalStore` — `next-themes` rendered an inline `<script>`
+  that React 19 flags on every render. Anti-flash handled by a server-rendered
+  `themeInitScript` in the root `<head>`. Toggle + system + cross-tab all work.
+- `components/ui/button.tsx`: default Base UI `nativeButton` to `false` when a
+  `render` prop is used (our buttons render as `<Link>`), silencing the repeated
+  a11y warning.
+
+### Form correctness
+
+- Apparel types aligned to the backend enum (`tshirt`, `hoodie`, `jacket`,
+  `football_kit`, `other`) in `lib/labels.ts`.
+- Deadline can no longer be in the past: `min={todayIso()}` on the date input
+  plus a Zod refine (`lib/validation/request.ts`); `todayIso` added to `lib/format.ts`.
+
+---
+
 ## 2026-08-24 — Vendor & admin flows
 
 Completed the two remaining role dashboards, reusing the client foundation

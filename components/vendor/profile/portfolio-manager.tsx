@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { EmptyState } from "@/components/shared/empty-state";
 import { ApiError } from "@/lib/api/http";
+import { mediaUrl } from "@/lib/media";
 import {
   useAddPortfolioItem,
   useDeletePortfolioItem,
@@ -90,7 +91,7 @@ export function PortfolioManager({ items }: { items: PortfolioItem[] }) {
               >
                 <div className="relative aspect-square w-full">
                   <Image
-                    src={item.image}
+                    src={mediaUrl(item.image)}
                     alt={item.title ?? "Portfolio item"}
                     fill
                     sizes="200px"

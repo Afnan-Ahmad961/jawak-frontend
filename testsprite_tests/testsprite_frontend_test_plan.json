@@ -1,0 +1,1627 @@
+[
+  {
+    "id": "TC001",
+    "title": "Unauthenticated visitors are redirected from protected client pages",
+    "description": "An unauthenticated visitor trying to open a protected client route is sent to the sign-in page instead of the protected content.",
+    "category": "Role-based Routing Guard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /client"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sign-in page is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Create a complete design request",
+    "description": "A client can submit a multipart apparel request with a design image and reach the created request detail afterward.",
+    "category": "Create Design Request",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the client role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /client/requests/new"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the request title"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the apparel type"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the quantity"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the size requirements"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the color requirements"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid deadline"
+      },
+      {
+        "type": "action",
+        "description": "Upload a design image"
+      },
+      {
+        "type": "action",
+        "description": "Submit the request form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the created request detail is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the submitted request appears as a newly created request"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Accept a bid and award the job",
+    "description": "A client can review bids on a request and accept one to award the job and create an order.",
+    "category": "Compare and Award Bids",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the client role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /client/requests"
+      },
+      {
+        "type": "action",
+        "description": "Open a request with received bids"
+      },
+      {
+        "type": "action",
+        "description": "Review the available bids"
+      },
+      {
+        "type": "action",
+        "description": "Accept one bid"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the request is shown in an awarded state"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an order is created for the awarded request"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Confirm order delivery",
+    "description": "A client can confirm delivery on an order detail and see the order marked completed.",
+    "category": "Track Orders and Confirm Delivery",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form with {{LOGIN_USER}} and {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to view orders"
+      },
+      {
+        "type": "action",
+        "description": "Open an order detail from the list"
+      },
+      {
+        "type": "action",
+        "description": "Confirm delivery for the order"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the order is marked completed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a delivery confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Unauthenticated visitors are redirected from a protected request list",
+    "description": "An unauthenticated visitor trying to open a protected client list page is sent to the sign-in page instead of the protected content.",
+    "category": "Role-based Routing Guard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /client/requests"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sign-in page is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Unauthenticated visitors are redirected from a protected vendor jobs page",
+    "description": "An unauthenticated visitor trying to open a protected vendor jobs page is sent to the sign-in page instead of the protected content.",
+    "category": "Role-based Routing Guard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /vendor/jobs"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sign-in page is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Create vendor profile",
+    "description": "A vendor can enter company profile details and save a profile that promotes the account to a vendor profile.",
+    "category": "Vendor Profile and Portfolio",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form with {{LOGIN_USER}} and {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Open the vendor profile page"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the company name field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the location field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the specialties field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the capacity field"
+      },
+      {
+        "type": "action",
+        "description": "Save the profile"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the vendor profile is created or updated"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the saved profile details are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Browse and open own requests by status",
+    "description": "A client can filter their requests by status and open a request to review its details.",
+    "category": "Manage Own Requests",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the client role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /client/requests"
+      },
+      {
+        "type": "action",
+        "description": "Select a status filter"
+      },
+      {
+        "type": "action",
+        "description": "Open a request from the filtered list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the request detail is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the request information is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Submit a bid on an open job",
+    "description": "A vendor can open an open job, submit a bid with price, delivery days, and message, and see the bid reflected on the job.",
+    "category": "Vendor Job Board and Bidding",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the vendor role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to view open jobs"
+      },
+      {
+        "type": "action",
+        "description": "Open a job from the job board"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid bid price"
+      },
+      {
+        "type": "action",
+        "description": "Select valid delivery days"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a bid message"
+      },
+      {
+        "type": "action",
+        "description": "Submit the bid"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the bid is shown on the job detail view"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Track an order timeline",
+    "description": "A client can open an order detail and review the production timeline and current stage for an awarded order.",
+    "category": "Track Orders and Confirm Delivery",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form with {{LOGIN_USER}} and {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to view orders"
+      },
+      {
+        "type": "action",
+        "description": "Open an order detail from the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the production timeline is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the current order stage is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Show admin analytics overview",
+    "description": "This verifies that an authenticated admin can open the analytics dashboard and see marketplace totals and charts.",
+    "category": "Admin Analytics",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the admin analytics entry point"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify analytics totals are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify analytics charts are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "Edit an existing request and save the changes",
+    "description": "A client can open one of their requests, update its details, and see the saved changes reflected afterward.",
+    "category": "Manage Own Requests",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the client role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /client/requests"
+      },
+      {
+        "type": "action",
+        "description": "Open a request from the list"
+      },
+      {
+        "type": "action",
+        "description": "Choose to edit the request"
+      },
+      {
+        "type": "action",
+        "description": "Update the request details"
+      },
+      {
+        "type": "action",
+        "description": "Save the request changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated request detail is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the saved request changes are visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "Browse vendor directory",
+    "description": "A client can open the vendor directory and see vendor cards available to browse.",
+    "category": "Browse Vendors",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form with {{LOGIN_USER}} and {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to browse vendors"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify vendor cards are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "Post a production update on an assigned order",
+    "description": "A vendor can open an assigned order, add a forward-moving production update, and see the production timeline advance.",
+    "category": "Vendor Production Updates",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the vendor role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to view assigned orders"
+      },
+      {
+        "type": "action",
+        "description": "Open an assigned order"
+      },
+      {
+        "type": "action",
+        "description": "Choose the next available production stage"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a production note"
+      },
+      {
+        "type": "action",
+        "description": "Submit the production update"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the production history is updated"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the timeline advances"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC015",
+    "title": "Update vendor profile details",
+    "description": "A vendor can edit an existing profile and see the updated profile information after saving.",
+    "category": "Vendor Profile and Portfolio",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form with {{LOGIN_USER}} and {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Open the vendor profile page"
+      },
+      {
+        "type": "action",
+        "description": "Update the company name field"
+      },
+      {
+        "type": "action",
+        "description": "Update the location field"
+      },
+      {
+        "type": "action",
+        "description": "Save the profile"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the vendor profile is updated"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated profile details are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC016",
+    "title": "Review disputes list",
+    "description": "This verifies that an authenticated admin can open the disputes page and view the list of disputes.",
+    "category": "Admin Dispute Resolution",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the disputes section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the disputes list is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC017",
+    "title": "Open a vendor profile",
+    "description": "A client can open a vendor profile from the directory and see the vendor's profile details.",
+    "category": "Browse Vendors",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form with {{LOGIN_USER}} and {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to browse vendors"
+      },
+      {
+        "type": "action",
+        "description": "Open a vendor profile from the directory"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the vendor profile is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify vendor ratings, reviews, and portfolio content are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC018",
+    "title": "Mark a notification as read",
+    "description": "This verifies that a signed-in user can open notifications and mark one as read so the unread count decreases.",
+    "category": "Notifications",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the client area entry point"
+      },
+      {
+        "type": "action",
+        "description": "Open notifications"
+      },
+      {
+        "type": "action",
+        "description": "Mark a notification as read"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the unread count decreases"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC019",
+    "title": "Delete an unwanted request",
+    "description": "A client can delete one of their requests and return to the list without that request present.",
+    "category": "Manage Own Requests",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the client role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /client/requests"
+      },
+      {
+        "type": "action",
+        "description": "Open a request from the list"
+      },
+      {
+        "type": "action",
+        "description": "Choose to delete the request"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the requests list is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the deleted request is no longer present"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC020",
+    "title": "Add a portfolio item",
+    "description": "A vendor can add portfolio content to their profile and see the new item in the portfolio list.",
+    "category": "Vendor Profile and Portfolio",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form with {{LOGIN_USER}} and {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Open the vendor profile page"
+      },
+      {
+        "type": "action",
+        "description": "Add a portfolio item"
+      },
+      {
+        "type": "action",
+        "description": "Save the profile"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the portfolio item is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated portfolio is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC021",
+    "title": "Send a message in a client conversation",
+    "description": "A client can open a conversation, send a message, and see the new message appear in the thread.",
+    "category": "Messaging",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the client role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to view conversations"
+      },
+      {
+        "type": "action",
+        "description": "Open a conversation"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a message"
+      },
+      {
+        "type": "action",
+        "description": "Send the message"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new message appears in the thread"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC022",
+    "title": "Open a dispute detail",
+    "description": "This verifies that an authenticated admin can open a dispute and review its details.",
+    "category": "Admin Dispute Resolution",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the disputes section"
+      },
+      {
+        "type": "action",
+        "description": "Open a dispute from the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the dispute detail is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC023",
+    "title": "View unread notification badge",
+    "description": "This verifies that a signed-in user can see whether unread notifications are present from the shared notification control.",
+    "category": "Notifications",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the client area entry point"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the unread notification badge is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC024",
+    "title": "View vendor portfolio items",
+    "description": "A client can inspect the portfolio section on a vendor profile and see portfolio work available to review.",
+    "category": "Browse Vendors",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form with {{LOGIN_USER}} and {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to browse vendors"
+      },
+      {
+        "type": "action",
+        "description": "Open a vendor profile from the directory"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify portfolio items are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC025",
+    "title": "Send a message in a vendor conversation",
+    "description": "A vendor can open a conversation, send a message, and see the new message appear in the thread.",
+    "category": "Messaging",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the vendor role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to view conversations"
+      },
+      {
+        "type": "action",
+        "description": "Open a conversation"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a message"
+      },
+      {
+        "type": "action",
+        "description": "Send the message"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new message appears in the thread"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC026",
+    "title": "Submit a post-completion review",
+    "description": "A client can submit a review after completing an order and see the review recorded on the order.",
+    "category": "Track Orders and Confirm Delivery",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form with {{LOGIN_USER}} and {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to view orders"
+      },
+      {
+        "type": "action",
+        "description": "Open an order detail from the list"
+      },
+      {
+        "type": "action",
+        "description": "Confirm delivery for the order"
+      },
+      {
+        "type": "action",
+        "description": "Submit a review for the order"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the review is recorded on the order"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the submitted review is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC027",
+    "title": "Visitor can open the sign-in page directly",
+    "description": "A visitor can navigate directly to the sign-in page from the public site.",
+    "category": "Google OAuth Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sign-in page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify Google sign-in is available"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC028",
+    "title": "Review top vendors in analytics",
+    "description": "This verifies that an authenticated admin can inspect the vendor ranking section within the analytics overview.",
+    "category": "Admin Analytics",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the admin analytics entry point"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify top vendors are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC029",
+    "title": "Open vendor reviews",
+    "description": "A client can review vendor feedback on a profile and see previously posted reviews.",
+    "category": "Browse Vendors",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form with {{LOGIN_USER}} and {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to browse vendors"
+      },
+      {
+        "type": "action",
+        "description": "Open a vendor profile from the directory"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify vendor reviews are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC030",
+    "title": "Public landing page leads visitors to sign in",
+    "description": "A visitor can view the public landing page and reach the sign-in page from a call to action.",
+    "category": "Public Landing Page",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify marketing content is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Click the call to action to sign in"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sign-in page is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC031",
+    "title": "Open a vendor profile from a bid",
+    "description": "A client can drill into a vendor profile from a bid context and review the vendor's public details.",
+    "category": "Compare and Award Bids",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the client role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /client/requests"
+      },
+      {
+        "type": "action",
+        "description": "Open a request with received bids"
+      },
+      {
+        "type": "action",
+        "description": "Open a vendor profile from one of the bids"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the vendor profile is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the vendor rating reviews and portfolio are visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC032",
+    "title": "Filter disputes by status",
+    "description": "This verifies that an authenticated admin can narrow the disputes list using a status filter.",
+    "category": "Admin Dispute Resolution",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the disputes section"
+      },
+      {
+        "type": "action",
+        "description": "Select a dispute status filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the filtered disputes list is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC033",
+    "title": "Withdraw a pending bid",
+    "description": "A vendor can open their bids list, withdraw a pending bid, and see the bid status update.",
+    "category": "Vendor Job Board and Bidding",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the vendor role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to view own bids"
+      },
+      {
+        "type": "action",
+        "description": "Open a pending bid"
+      },
+      {
+        "type": "action",
+        "description": "Withdraw the bid"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the bid status is updated"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC034",
+    "title": "Remove a portfolio item",
+    "description": "A vendor can remove an existing portfolio item and see it disappear from the profile.",
+    "category": "Vendor Profile and Portfolio",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form with {{LOGIN_USER}} and {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Open the vendor profile page"
+      },
+      {
+        "type": "action",
+        "description": "Remove a portfolio item"
+      },
+      {
+        "type": "action",
+        "description": "Save the profile"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the portfolio item is removed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated portfolio is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC035",
+    "title": "Resolve a dispute with a note",
+    "description": "This verifies that an authenticated admin can resolve a dispute and see the updated outcome reflected in the UI.",
+    "category": "Admin Dispute Resolution",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the disputes section"
+      },
+      {
+        "type": "action",
+        "description": "Open a dispute from the list"
+      },
+      {
+        "type": "action",
+        "description": "Choose the resolve action"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a resolution note with a valid note"
+      },
+      {
+        "type": "action",
+        "description": "Submit the resolution"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the dispute status is updated"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a resolution confirmation is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC036",
+    "title": "See vendor profile validation",
+    "description": "A vendor sees validation feedback when required profile details are missing and cannot save an incomplete profile.",
+    "category": "Vendor Profile and Portfolio",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form with {{LOGIN_USER}} and {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Open the vendor profile page"
+      },
+      {
+        "type": "action",
+        "description": "Leave required profile fields empty"
+      },
+      {
+        "type": "action",
+        "description": "Save the profile"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify profile validation errors are displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC037",
+    "title": "Prevent duplicate bid submission",
+    "description": "A vendor who has already bid on a job can review the existing bid indicator and is not able to submit a duplicate bid from the same job.",
+    "category": "Vendor Job Board and Bidding",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the vendor role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to view open jobs"
+      },
+      {
+        "type": "action",
+        "description": "Open a job from the job board"
+      },
+      {
+        "type": "action",
+        "description": "Verify an existing bid indicator is visible"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to submit another bid for the same job"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the duplicate bid is not submitted"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC038",
+    "title": "Reject a dispute with a note",
+    "description": "This verifies that an authenticated admin can reject a dispute and see the updated outcome reflected in the UI.",
+    "category": "Admin Dispute Resolution",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the disputes section"
+      },
+      {
+        "type": "action",
+        "description": "Open a dispute from the list"
+      },
+      {
+        "type": "action",
+        "description": "Choose the reject action"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a resolution note with a valid note"
+      },
+      {
+        "type": "action",
+        "description": "Submit the rejection"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the dispute status is updated"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a rejection confirmation is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC039",
+    "title": "See validation when required request details are missing",
+    "description": "A client gets inline validation feedback when attempting to submit an incomplete design request.",
+    "category": "Create Design Request",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the client role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /client/requests/new"
+      },
+      {
+        "type": "action",
+        "description": "Submit the request form without entering required details"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation errors are visible for the missing required fields"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the request is not created"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC040",
+    "title": "Show only forward-moving production stages",
+    "description": "A vendor can only choose the next available production stage when posting an update on an assigned order.",
+    "category": "Vendor Production Updates",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the vendor role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to view assigned orders"
+      },
+      {
+        "type": "action",
+        "description": "Open an assigned order"
+      },
+      {
+        "type": "action",
+        "description": "Open the production stage selector"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify only the next available stage can be selected"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC041",
+    "title": "View an order with no updates",
+    "description": "A client can open an order detail and see an empty or minimal timeline when no production updates have been posted yet.",
+    "category": "Track Orders and Confirm Delivery",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form with {{LOGIN_USER}} and {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to view orders"
+      },
+      {
+        "type": "action",
+        "description": "Open an order detail from the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the production timeline is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty state or no-updates message is displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC042",
+    "title": "View an empty vendor directory",
+    "description": "A client can open the vendor directory and see an empty state when no vendors are available.",
+    "category": "Browse Vendors",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form with {{LOGIN_USER}} and {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to browse vendors"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty state message is displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC043",
+    "title": "See vendor profile with missing portfolio",
+    "description": "A client can open a vendor profile and see the profile even when no portfolio items have been added.",
+    "category": "Browse Vendors",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form with {{LOGIN_USER}} and {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to browse vendors"
+      },
+      {
+        "type": "action",
+        "description": "Open a vendor profile from the directory"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the vendor profile is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the portfolio section shows an empty state"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC044",
+    "title": "Open the login page from the landing page",
+    "description": "This verifies that a visitor can move from the public landing page to the sign-in page.",
+    "category": "Admin Analytics",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Click the sign-in call to action"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the login page is displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC045",
+    "title": "View the public landing page",
+    "description": "This verifies that an unauthenticated visitor can open the public home page and see the main marketing content.",
+    "category": "Admin Analytics",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the public landing content is displayed"
+      }
+    ],
+    "priority": "Low"
+  }
+]

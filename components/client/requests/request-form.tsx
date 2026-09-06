@@ -30,6 +30,8 @@ import {
 } from "@/components/ui/form";
 import { ApiError } from "@/lib/api/http";
 import { APPAREL_TYPES } from "@/lib/labels";
+import { todayIso } from "@/lib/format";
+import { mediaUrl } from "@/lib/media";
 import {
   useAddReferenceImages,
   useCreateRequest,
@@ -57,7 +59,7 @@ export function RequestForm({ request }: { request?: DesignRequest }) {
   const addReferenceImages = useAddReferenceImages();
 
   const [designPreview, setDesignPreview] = useState<string | null>(
-    request?.design_image ?? null,
+    mediaUrl(request?.design_image) || null,
   );
   // Track a stable id per selected file — names can collide, so they can't be
   // React keys on their own.
@@ -268,7 +270,14 @@ export function RequestForm({ request }: { request?: DesignRequest }) {
                 <FormItem>
                   <FormLabel>Deadline</FormLabel>
                   <FormControl>
-                    <Input type="date" className="w-fit" {...field} />
+                    {/* `min` blocks past dates in the native picker; the schema
+                        enforces the same rule for typed/pasted values. */}
+                    <Input
+                      type="date"
+                      className="w-fit"
+                      min={todayIso()}
+                      {...field}
+                    />
                   </FormControl>
                   <FormDescription>
                     When you need the finished order delivered.

@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { apparelLabel } from "@/lib/labels";
 import { formatDate, formatQuantity } from "@/lib/format";
+import { mediaUrl } from "@/lib/media";
 import type { DesignRequest } from "@/lib/api/types";
 
 /** A job (design request) tile on the vendor's open board. */
@@ -26,7 +27,7 @@ export function JobCard({
         {request.design_image && (
           <div className="relative aspect-video w-full bg-muted">
             <Image
-              src={request.design_image}
+              src={mediaUrl(request.design_image)}
               alt={request.title}
               fill
               sizes="(max-width: 768px) 100vw, 33vw"

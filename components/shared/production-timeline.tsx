@@ -3,6 +3,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { CheckmarkCircle02Icon } from "@hugeicons/core-free-icons";
 import { cn } from "@/lib/utils";
 import { formatDateTime } from "@/lib/format";
+import { mediaUrl } from "@/lib/media";
 import { PRODUCTION_STAGE_STEPS } from "@/lib/labels";
 import { PRODUCTION_STAGES } from "@/lib/api/types";
 import type { ProductionStage, ProductionUpdate } from "@/lib/api/types";
@@ -95,7 +96,7 @@ export function ProductionTimeline({
                   {update.image && (
                     <div className="relative mt-1 aspect-video w-full max-w-xs overflow-hidden rounded-md border border-border bg-muted">
                       <Image
-                        src={update.image}
+                        src={mediaUrl(update.image)}
                         alt={`${label} update`}
                         fill
                         sizes="20rem"
