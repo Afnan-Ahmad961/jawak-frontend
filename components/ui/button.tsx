@@ -42,11 +42,20 @@ function Button({
   className,
   variant = "default",
   size = "default",
+  render,
+  nativeButton,
   ...props
 }: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
   return (
     <ButtonPrimitive
       data-slot="button"
+      render={render}
+      // Base UI defaults `nativeButton` to true. When we render as a custom
+      // element via `render` (in this app always a Next <Link> → <a>), that
+      // default is wrong and Base UI logs an a11y warning on every render.
+      // Default it to false whenever `render` is used, unless a caller opts back
+      // in (e.g. a `render` that really is a <button>).
+      nativeButton={nativeButton ?? render === undefined}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />

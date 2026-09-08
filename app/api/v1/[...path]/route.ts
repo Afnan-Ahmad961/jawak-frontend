@@ -49,7 +49,12 @@ async function forward(request: NextRequest, ctx: Ctx): Promise<Response> {
   }
 
   const { path } = await ctx.params;
-  const target = djangoUrl(path.join("/")) + request.nextUrl.search;
+  // Django enforces APPEND_SLASH, but Next's catch-all drops the trailing slash
+  // (`/api/v1/requests/` → path `["requests"]`). Re-add it before the query
+  // string so Django gets `/api/v1/requests/` and doesn't 302 (GET) or 500 (POST).
+  const joined = path.join("/");
+  const withSlash = joined.endsWith("/") ? joined : `${joined}/`;
+  const target = djangoUrl(withSlash) + request.nextUrl.search;
 
   // Read the body once (if any) so we can safely retry after a refresh.
   const hasBody = request.method !== "GET" && request.method !== "HEAD";

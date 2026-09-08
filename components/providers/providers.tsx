@@ -17,12 +17,7 @@ export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(makeQueryClient);
 
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
+    <ThemeProvider>
       <NuqsAdapter>
         <QueryClientProvider client={queryClient}>
           {children}

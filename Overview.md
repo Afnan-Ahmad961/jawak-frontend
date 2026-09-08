@@ -238,3 +238,60 @@ Admins moderate disputes and monitor the marketplace. (Admin = user with the
 - **Notifications** power live UX across every screen — poll
   `notifications/?unread=true` for the bell, `POST notifications/<id>/read/` or
   `read-all/` to clear.
+
+---
+
+## 5. Data model (source of truth for field names)
+
+The database schema below is authoritative — **match these exact field names in
+payloads and types.** A few are easy to get wrong (they bit us once); they're
+flagged with ⚠.
+
+```
+user                id, username, email, role, google_uid, created_at
+vendor_profile      id, user_id, company_name, location,
+                    specialties (⚠ json), capacity,
+                    avg_rating (⚠ not `rating`), review_count,
+                    created_at, updated_at
+portfolio_item      id, vendor_id, image, title, description, created_at
+design_request      id, client_id, title, description, apparel_type, quantity,
+                    material, sizes (⚠ json — send a JSON array, e.g.
+                    ["S","M","L"], not a plain string),
+                    color_preferences, deadline (date), design_image, status,
+                    created_at, updated_at
+design_reference_image
+                    id, design_request_id, image,
+                    label (⚠ not `caption`), created_at
+bid                 id, design_request_id, vendor_id, proposed_price,
+                    delivery_days, message, status, created_at, updated_at
+order               id, bid_id, design_request_id, vendor_id, client_id,
+                    final_price (⚠ not `proposed_price`), deadline (date),
+                    current_stage, status, created_at, updated_at
+production_update   id, order_id, stage, note, image, created_by_id, created_at
+conversation        id, design_request_id, vendor_id, created_at, updated_at
+message             id, conversation_id, sender_id,
+                    body (⚠ not `content`), is_read, created_at
+notification        id, recipient_id, notification_type (⚠ not `type`),
+                    message, content_type_id, object_id,
+                    is_read (⚠ not `read`), created_at
+review              id, order_id, reviewer_id, reviewee_id, rating, comment,
+                    created_at
+dispute             id, order_id, raised_by_id, reason, description, status,
+                    resolution, resolved_by_id, created_at, updated_at
+```
+
+**Relationships:** `vendor_profile.user_id → user`; `portfolio_item.vendor_id →
+vendor_profile`; `design_request.client_id → user`;
+`design_reference_image.design_request_id → design_request`;
+`bid.{design_request_id → design_request, vendor_id → vendor_profile}`;
+`order.{bid_id → bid (1:1), design_request_id, vendor_id → vendor_profile,
+client_id → user}`; `production_update.{order_id, created_by_id → user}`;
+`conversation.{design_request_id, vendor_id → vendor_profile}`;
+`message.{conversation_id, sender_id → user}`;
+`notification.recipient_id → user`;
+`review.{order_id, reviewer_id → user, reviewee_id → user}`;
+`dispute.{order_id, raised_by_id → user, resolved_by_id → user}`.
+
+> Vendors are `vendor_profile` rows — a bid/order/conversation's `vendor` is a
+> **vendor_profile id**, not a user id. Reviews are two-way via
+> `reviewer_id`/`reviewee_id` (no direct `vendor` field on a review).
